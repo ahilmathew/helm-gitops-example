@@ -6,7 +6,7 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
  # repository: codefresh/kubectl
-  repository: nginx
+  repository: nginxdemos/hello
   tag: latest
 imagePullSecrets: []
 nameOverride: ""
