@@ -15,6 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+
+      - name: Dump github context
+        run:   echo "$GITHUB_CONTEXT"
+        shell: bash
+        env:
+         GITHUB_CONTEXT: ${{ toJson(github) }}
+         
       - name: Generate manifests to apply
         if: github.ref != 'refs/heads/main'
         run: |
