@@ -22,6 +22,7 @@ jobs:
         env:
          GITHUB_CONTEXT: ${{ toJson(github) }}
 
+
       - name: Generate manifests to apply
         if: github.ref != 'refs/heads/main'
         run: |
@@ -30,9 +31,34 @@ jobs:
           
           cat ./generated/argocd-app/templates/*.yaml
 
-      - name: Apply
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+      - name: 'Deploy'
+        uses: 'deliverybot/helm@v1'
         with:
-          args: apply -f ./argocd-app/generated/argocd-app/templates/
+          release: 'test'
+          chart: 'argocd-app'
+          values: |
+            isPR: true
+            repoUrl: ${{ github.event.repository.html_url }}
+            currentBranch: ${{ github.event.pull_request.head.ref }}
+            branchName: ${{ github.event.pull_request.head.ref }}
+          value-files: >-
+          [
+            "values.yaml"
+          ]
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+      # - name: Generate manifests to apply
+      #   if: github.ref != 'refs/heads/main'
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/argocd-app
+      #     helm template test -f values.yaml . --output-dir ./generated --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
+          
+      #     cat ./generated/argocd-app/templates/*.yaml
+
+      # - name: Apply
+      #   uses: actions-hub/kubectl@master
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+      #   with:
+      #     args: apply -f ./argocd-app/generated/argocd-app/templates/
