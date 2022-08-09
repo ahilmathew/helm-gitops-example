@@ -3,9 +3,9 @@ kind: Application
 metadata:
   {{- if .Values.isPr }}
   annotations:
-    "janitor/expires": {{ now | date_modify "+2.0h" | date "2006-01-02T15:04" | quote  }}
+    "janitor/expires": {{ dateInZone "2006-01-02T15:04" (now | date_modify "+2.0h" ) "UTC" | quote  }}
   {{- end }}
-  name: {{ template "releasename" . }}
+  name: {{ if .Values.isPr }}{{ template "prnamespacename" . }}{{ else }}{{ template "namespacename" . }}{{ end }}
   finalizers: 
     - resources-finalizer.argocd.argoproj.io
   namespace: platform-tools
