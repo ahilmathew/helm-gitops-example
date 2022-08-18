@@ -26,4 +26,4 @@ resources:
     cpu: 100m
     memory: 128Mi
 ingress:
-  enabled: true
+  enabled: false
