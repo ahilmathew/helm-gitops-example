@@ -2,11 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
-
+appName: nginx
 image:
   pullPolicy: IfNotPresent
  # repository: codefresh/kubectl
- # repository: nginxdemos/hello
+  # repository: nginxdemos/hello
   repository: nginx
   tag: latest
 imagePullSecrets: []
