@@ -6,8 +6,8 @@ appName: nginx
 image:
   pullPolicy: IfNotPresent
  # repository: codefresh/kubectl
-  repository: nginxdemos/hello
-  # repository: nginx
+  # repository: nginxdemos/hello
+  repository: nginx
   tag: latest
 imagePullSecrets: []
 nameOverride: ""
