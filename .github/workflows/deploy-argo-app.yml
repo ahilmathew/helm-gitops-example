@@ -32,21 +32,5 @@ jobs:
 
           echo $KUBE_CONFIG | base64 -d > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
-          helm upgrade --install ${{ github.event.pull_request.head.ref }}-pr-deploy -f values.yaml . --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
-         # helm template test -f values.yaml . --output-dir ./generated --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
-         # cat ./generated/argocd-app/templates/*.yaml
-
-      # - name: Generate manifests to apply
-      #   if: github.ref != 'refs/heads/main'
-      #   run: |
-      #     cd $GITHUB_WORKSPACE/argocd-app
-      #     helm template test -f values.yaml . --output-dir ./generated --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
-          
-      #     cat ./generated/argocd-app/templates/*.yaml
-
-      # - name: Apply
-      #   uses: actions-hub/kubectl@master
-      #   env:
-      #     KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
-      #   with:
-      #     args: apply -f ./argocd-app/generated/argocd-app/templates/
+          releaseName=$(echo ${{ github.event.pull_request.head.ref }} | sed -r 's/[/]+/-/g')
+          helm upgrade --install $releaseName-pr-deploy -f values.yaml . --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
