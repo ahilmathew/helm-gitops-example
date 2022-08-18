@@ -32,7 +32,7 @@ jobs:
 
           echo $KUBE_CONFIG | base64 -d > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
-          helm upgrade --install test -f values.yaml . --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
+          helm upgrade --install ${{ github.event.pull_request.head.ref }}-pr-deploy -f values.yaml . --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
          # helm template test -f values.yaml . --output-dir ./generated --set isPr=true,repoUrl=${{ github.event.repository.html_url }},currentBranch=${{ github.event.pull_request.head.ref }},branchName=${{ github.event.pull_request.head.ref }}
          # cat ./generated/argocd-app/templates/*.yaml
 
